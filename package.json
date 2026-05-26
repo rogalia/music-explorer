@@ -1,0 +1,24 @@
+{
+    "name": "music-explorer",
+    "type": "module",
+    "private": true,
+    "scripts": {
+        "build": "nuxt build",
+        "dev": "nuxt dev",
+        "generate": "nuxt generate",
+        "preview": "nuxt preview",
+        "postinstall": "nuxt prepare"
+    },
+    "dependencies": {
+        "@oxc-parser/binding-darwin-arm64": "^0.128.0",
+        "@oxc-transform/binding-darwin-arm64": "^0.128.0",
+        "nuxt": "^4.4.4",
+        "nuxt-icons": "^4.0.0",
+        "vue": "^3.5.33",
+        "vue-router": "^5.0.6"
+    },
+    "devDependencies": {
+        "@nuxtjs/tailwindcss": "^6.14.0",
+        "@types/lodash.debounce": "^4.0.9"
+    }
+}
