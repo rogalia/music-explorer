@@ -1,40 +1,11 @@
 <template>
     <div class="w-full mx-auto pt-8 px-12 flex align-top justify-between">
-        <div class="w-[20%] border border-solid border-grey rounded-sm">
-            Filters
-            <br>
-            <br>
-            1
-            <br>
-            <br>
-            1
-            <br>
-            <br>
-            2
-            <br>
-            <br>
-            3
-            <br>
-            <br>
-        </div>
-
+        <Filters v-model:filters="filters" />
 
         <div class="w-[calc(80%-16px)]">
-            <div class="w-full flex align-center">
-                <div class="w-full rounded-full bg-purple py-4 px-6 relative">
-                    <input class="w-full outline-none bg-purple"
-                           placeholder="Type the name of artist"
-                           v-model="userQuery"
-                    />
-                </div>
-
-                <Button class="ml-2 rounded-full px-8"
-                        outlined
-                        @click="searchArtists"
-                >
-                    Search
-                </Button>
-            </div>
+            <Search v-model="userQuery"
+                    @searchClick="searchArtists"
+            />
 
             <div>
                 <p class="text-violet mt-2 ml-6"
@@ -76,8 +47,19 @@
 <script setup lang="ts">
 import { useSearch } from "@/composables/useSearch"
 
-const { userSearched, loading, error, userQuery, foundArtists, searchArtists } = useSearch()
+const { userSearched, loading, error, userQuery, foundArtists, searchArtists, filters } = useSearch()
 
 
+// import {mbFetch} from "~/api/mbFetch";
+// import {mbEndpoints} from "~/api/mbEndpoints";
 
+// onMounted(async () => {
+//     const genres = ref<any>([])
+
+    // for(let i = 1; i <= 22; i++) {
+    //     const gotGenres = await mbFetch<any>(mbEndpoints.getGenres, {limit: '100', offset: `${i * 100}`})
+    //
+    //     genres.value.push(gotGenres.genres)
+    // }
+// })
 </script>

@@ -1,4 +1,5 @@
-import { type Artist } from "@/types/artist";
+import { type Artist } from "@/types/artist"
+import { type Filters } from "@/types/filters"
 
 import { getArtists } from '@/services/artists'
 
@@ -8,6 +9,11 @@ export function useSearch() {
     const foundArtists = ref<Artist[]>([])
     const loading = ref(false)
     const error = ref<string | null>(null)
+    const filters = ref<Filters>({
+        types: [],
+        genres: [],
+        countries: []
+    })
     
     async function searchArtists() {
         loading.value = true
@@ -36,5 +42,6 @@ export function useSearch() {
         userQuery,
         foundArtists,
         searchArtists,
+        filters
     }
 }

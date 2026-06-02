@@ -19,12 +19,12 @@
 
 import {type ArtistPreview} from "@/types/artist"
 
-const props = defineProps<{
+const { artist } = defineProps<{
     artist: ArtistPreview,
 }>()
 
 const shortName = computed(() => {
-    return props.artist.name
+    return artist.name
         .split(' ')
         .filter(word => word.length > 0)
         .reduce((acc, word) => {

@@ -13,7 +13,7 @@
 </template>
 
 <script setup lang="ts">
-const props = defineProps<{
+const { label, big, outlined } = defineProps<{
     label?: string,
     big?: boolean,
     outlined?: boolean,

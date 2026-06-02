@@ -12,6 +12,8 @@
     "dependencies": {
         "@oxc-parser/binding-darwin-arm64": "^0.128.0",
         "@oxc-transform/binding-darwin-arm64": "^0.128.0",
+        "@vueform/multiselect": "^2.6.11",
+        "country-list": "^2.4.1",
         "nuxt": "^4.4.4",
         "nuxt-icons": "^4.0.0",
         "vue": "^3.5.33",
