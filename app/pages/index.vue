@@ -3,7 +3,7 @@
         <Filters v-model:filters="filters" />
 
         <div class="w-[calc(80%-16px)]">
-            <Search v-model="userQuery"
+            <Search v-model="search"
                     @searchClick="searchArtists"
             />
 
@@ -47,7 +47,7 @@
 <script setup lang="ts">
 import { useSearch } from "@/composables/useSearch"
 
-const { userSearched, loading, error, userQuery, foundArtists, searchArtists, filters } = useSearch()
+const { userSearched, loading, error, search, foundArtists, searchArtists, filters } = useSearch()
 
 
 // import {mbFetch} from "~/api/mbFetch";
