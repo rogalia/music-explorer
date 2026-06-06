@@ -13,11 +13,12 @@ export async function mbFetch<T>(endpoint: string, params?: Record<string, strin
             }
         }
     )
-    const jsonResponse = await response.json()
     
     if (!response.ok) {
         throw new Error(`MusicBrainz API error: ${response.status}`)
     }
+    
+    const jsonResponse = await response.json()
     
     return jsonResponse
 }

@@ -2,14 +2,14 @@
     <NuxtLink class="block w-[calc(25%-12px)]"
               :to="`/artist/${artist.name}`"
     >
-        <div class="w-full border border-solid border-grey aspect-square flex items-center justify-center">
+        <div class="w-full border border-solid border-grey aspect-square flex items-center justify-center text-violet text-3xl">
             {{ shortName }}
         </div>
 <!--        <img class="w-full"-->
 <!--             :src="imageUrl"-->
 <!--             :alt="`${artist.name} photo`"-->
 <!--        >-->
-        <p class="my-2 text-xl">
+        <p class="my-2 text-xl text-violet">
             {{ artist.name }}
         </p>
     </NuxtLink>

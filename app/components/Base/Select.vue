@@ -9,7 +9,7 @@
                      tagsSearch: 'absolute inset-0 border-0 outline-none focus:ring-0 appearance-none p-0 text-base font-sans box-border w-full ' +
                      'bg-transparent',
                      dropdown: 'max-h-60 absolute -left-px -right-px bottom-0 transform translate-y-full border -mt-px overflow-y-scroll z-50 flex flex-col rounded-b ' +
-                     'border border-solid border-grey bg-transparent',
+                     'border border-solid border-grey bg-black',
                      dropdownHidden: 'hidden',
                  }"
                  :modelValue="modelValue"

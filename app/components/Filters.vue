@@ -16,6 +16,10 @@
             <p class="text-lg text-violet mb-2">
                 Genre
             </p>
+
+            <BaseSelect v-model="filters.genres"
+                        :options="GENRES"
+            />
         </div>
 
         <div class="mb-4">
@@ -34,6 +38,7 @@
 import { type Filters } from "@/types/filters"
 
 import { ARTIST_TYPES } from "@/constants/artistTypes"
+import { GENRES } from "@/constants/genres"
 
 import { getData, type CountryType } from 'country-list'
 

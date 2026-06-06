@@ -18,3 +18,9 @@ export interface ArtistPreview {
     type: string,
     country: string,
 }
+
+export interface ArtistImageResponse {
+    thumbnail?: {
+        source?: string
+    }
+}

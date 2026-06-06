@@ -28,17 +28,17 @@ function getMBQuery(params: GetArtistsParams): string {
             }
             
             if (key === 'search') {
-                mbQuery += `artist:${value}`
+                mbQuery += value
             } else if (Array.isArray(value)){
-                mbQuery += `${filtersMapping[key]}:(${value.join(' OR ')})`
+                mbQuery += `${filtersMapping[key]}:(${value.map(item => `"${item}"`).join(' OR ')})`
             }
             
             return mbQuery
         }, '')
 }
 
-export async function getArtists(params: GetArtistsParams): Promise<ArtistsResponse> {
-    const artists = await mbFetch<ArtistsResponse>(mbEndpoints.getArtists, {query: getMBQuery(params)})
+export async function getArtists(queryParams: GetArtistsParams, offset: number = 0): Promise<ArtistsResponse> {
+    const artists = await mbFetch<ArtistsResponse>(mbEndpoints.getArtists, {query: getMBQuery(queryParams), limit: '100', offset: String(offset)})
     
     return artists
 }

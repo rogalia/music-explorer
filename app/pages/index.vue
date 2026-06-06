@@ -3,42 +3,48 @@
         <Filters v-model:filters="filters" />
 
         <div class="w-[calc(80%-16px)]">
-            <Search v-model="search"
-                    @searchClick="searchArtists"
-            />
+            <div class="w-full flex align-center">
+                <Search v-model="search"/>
+
+                <BaseButton class="ml-2 rounded-full px-8"
+                            :disabled="!isSearchable"
+                            outlined
+                            @click="searchArtists"
+                >
+                    Search
+                </BaseButton>
+            </div>
 
             <div>
                 <p class="text-violet mt-2 ml-6"
-                   v-if="!userSearched"
+                   v-if="!hasSearched"
                 >
                     Select some filters or enter the name of artist to explore music
                 </p>
 
-                <img class="mx-auto mt-16 w-[100px]"
-                     v-else-if="loading"
-                     src="@/assets/images/loader.gif"
-                     alt="Loading"
-                >
+                <p v-else-if="!foundArtists.length && !isLoading">
+                    Nothing was found
+                </p>
+
+                <div class="flex w-full flex-wrap mt-4 gap-4">
+                    <ArtistCard v-for="(artist, index) in foundArtists"
+                                :key="artist.id"
+                                :artist="artist"
+                                :ref="index === foundArtists.length - 1 ? 'lastArtistRef' : undefined"
+                    />
+                </div>
 
                 <p class="text-red-500 mt-2 ml-6"
-                   v-else-if="error"
+                   v-if="error"
                 >
                     {{ error }}
                 </p>
 
-                <p v-else-if="!foundArtists.length">
-                    Nothing was found
-                </p>
-
-                <div class="flex w-full flex-wrap mt-4 gap-4"
-                     v-else
+                <img class="mx-auto mt-16 w-[100px]"
+                     v-if="isLoading"
+                     src="@/assets/images/loader.gif"
+                     alt="Loading"
                 >
-                    <ArtistCard v-for="artist in foundArtists"
-                                :key="artist.id"
-                                :artist="artist"
-
-                    />
-                </div>
             </div>
         </div>
     </div>
@@ -47,19 +53,9 @@
 <script setup lang="ts">
 import { useSearch } from "@/composables/useSearch"
 
-const { userSearched, loading, error, search, foundArtists, searchArtists, filters } = useSearch()
+const { isSearchable, hasSearched, isLoading, error, search, filters, foundArtists, searchArtists, initSearch, lastArtistRef } = useSearch()
 
-
-// import {mbFetch} from "~/api/mbFetch";
-// import {mbEndpoints} from "~/api/mbEndpoints";
-
-// onMounted(async () => {
-//     const genres = ref<any>([])
-
-    // for(let i = 1; i <= 22; i++) {
-    //     const gotGenres = await mbFetch<any>(mbEndpoints.getGenres, {limit: '100', offset: `${i * 100}`})
-    //
-    //     genres.value.push(gotGenres.genres)
-    // }
-// })
+if (isSearchable.value) {
+    await initSearch()
+}
 </script>
