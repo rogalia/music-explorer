@@ -26,11 +26,13 @@
                     Nothing was found
                 </p>
 
-                <div class="flex w-full flex-wrap mt-4 gap-4">
+                <div class="flex w-full flex-wrap mt-4 gap-4"
+                     ref="containerEl"
+                >
                     <ArtistCard v-for="(artist, index) in foundArtists"
                                 :key="artist.id"
                                 :artist="artist"
-                                :ref="index === foundArtists.length - 1 ? 'lastArtistRef' : undefined"
+                                ref="foundArtists"
                     />
                 </div>
 
@@ -51,9 +53,9 @@
 </template>
 
 <script setup lang="ts">
-import { useSearch } from "@/composables/useSearch"
+import { useFindingArtists } from "~/composables/useFindingArtists"
 
-const { isSearchable, hasSearched, isLoading, error, search, filters, foundArtists, searchArtists, initSearch, lastArtistRef } = useSearch()
+const { isSearchable, hasSearched, isLoading, error, search, filters, foundArtists, searchArtists, initSearch } = useFindingArtists()
 
 if (isSearchable.value) {
     await initSearch()

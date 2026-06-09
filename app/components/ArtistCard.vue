@@ -1,6 +1,6 @@
 <template>
-    <NuxtLink class="block w-[calc(25%-12px)]"
-              :to="`/artist/${artist.name}`"
+    <div class="block w-[calc(25%-12px)]"
+         ref="card"
     >
         <div class="w-full border border-solid border-grey aspect-square flex items-center justify-center text-violet text-3xl">
             {{ shortName }}
@@ -9,10 +9,10 @@
 <!--             :src="imageUrl"-->
 <!--             :alt="`${artist.name} photo`"-->
 <!--        >-->
-        <p class="my-2 text-xl text-violet">
+        <NuxtLink class="my-2 text-xl text-violet">
             {{ artist.name }}
-        </p>
-    </NuxtLink>
+        </NuxtLink>
+    </div>
 </template>
 
 <script setup lang="ts">
@@ -30,6 +30,12 @@ const shortName = computed(() => {
         .reduce((acc, word) => {
         return acc += word[0]?.toUpperCase()
     }, '')
+})
+
+const cardRef = useTemplateRef('card')
+
+defineExpose({
+    cardRef
 })
 </script>
 

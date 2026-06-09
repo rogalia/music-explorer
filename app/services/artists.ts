@@ -40,5 +40,7 @@ function getMBQuery(params: GetArtistsParams): string {
 export async function getArtists(queryParams: GetArtistsParams, offset: number = 0): Promise<ArtistsResponse> {
     const artists = await mbFetch<ArtistsResponse>(mbEndpoints.getArtists, {query: getMBQuery(queryParams), limit: '100', offset: String(offset)})
     
+    // console.log(artists)
+    
     return artists
 }

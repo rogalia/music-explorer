@@ -3,13 +3,15 @@ import { type Filters } from "@/types/filters"
 
 import { getArtists } from '@/services/artists'
 
-export function useSearch() {
+import ArtistCard from "@/components/ArtistCard.vue"
+
+export function useFindingArtists() {
     const route = useRoute()
     const hasSearched = ref(false)
     const foundArtists = ref<Artist[]>([])
     const isLoading = ref(false)
     const error = ref<string | null>(null)
-    const search = ref((route.query.search as string) ?? '')
+    const search = ref<string>((route.query.search as string) ?? '')
     const filters = ref<Filters>({
         types: route.query.types ? (route.query.types as string).split(',') : [],
         genres: route.query.genres ? (route.query.genres as string).split(',') : [],
@@ -17,8 +19,7 @@ export function useSearch() {
     })
     const totalCount = ref(0)
     const offset = ref(0)
-    const lastArtistRef = useTemplateRef('lastArtistRef')
-    // const lastArtistObserver = ref<IntersectionObserver | null>(null)
+    const limit = ref(100)
     
     const urlParams = computed(() => {
         const params = Object.fromEntries(
@@ -49,6 +50,7 @@ export function useSearch() {
         isLoading.value = true
         error.value = null
         foundArtists.value = []
+        offset.value = 0
         
         if (!hasSearched.value) {
             hasSearched.value = true
@@ -59,10 +61,6 @@ export function useSearch() {
             
             foundArtists.value = artists
             totalCount.value = count
-            
-            // if (lastArtistObserver.value && lastArtistRef.value) {
-            //     lastArtistObserver.value.observe(lastArtistRef.value)
-            // }
         } catch(e) {
             error.value = e instanceof Error ? e.message : 'Unknown error'
         } finally {
@@ -77,20 +75,25 @@ export function useSearch() {
         
         if (data.value) {
             foundArtists.value = data.value.artists
+            totalCount.value = data.value.count
             hasSearched.value = true
         }
     }
     
+    const isMoreArtists = computed<boolean>(() => foundArtists.value.length < totalCount.value)
+    const lastArtistObserver = ref<IntersectionObserver | null>(null)
+    const foundArtistsRefs = useTemplateRef<typeof ArtistCard>('foundArtists')
+    
     async function loadMore() {
-        if (foundArtists.value.length < totalCount.value) {
+        if (isMoreArtists.value) {
             isLoading.value = true
             
             try {
-                offset.value += 100
+                offset.value += limit.value
                 
                 const { artists} = await getArtists({ ...filters.value, search: search.value }, offset.value)
                 
-                foundArtists.value.push(...artists)
+                foundArtists.value = [...foundArtists.value, ...artists]
             } catch(e) {
                 error.value = e instanceof Error ? e.message : 'Unknown error'
             } finally {
@@ -99,24 +102,39 @@ export function useSearch() {
         }
     }
     
+    function observeLastArtist() {
+        if (foundArtistsRefs.value && lastArtistObserver.value && isMoreArtists.value) {
+            const lastArtistEl = foundArtistsRefs.value[foundArtistsRefs.value.length - 1].cardRef
+            
+            lastArtistObserver.value.observe(lastArtistEl)
+        }
+    }
+    
     onMounted(() => {
-        // lastArtistObserver.value = new IntersectionObserver((entries) => {
-        //     entries.forEach(entry => {
-        //         if (entry.isIntersecting) {
-        //             loadMore()
-        //         }
-        //     })
-        // })
+        lastArtistObserver.value = new IntersectionObserver((entries) => {
+            entries.forEach((entry: IntersectionObserverEntry) => {
+                if (entry.isIntersecting) {
+                    loadMore()
+                    
+                    lastArtistObserver?.value?.unobserve(entry.target)
+                }
+            })
+        })
+        
+        if (foundArtists.value.length) {
+            observeLastArtist()
+        }
     })
     
     watch(
-        () => lastArtistRef.value,
-        (newLastArtistRef) => {
-            console.log(newLastArtistRef.$el)
-            // if (el && lastArtistObserver.value) {
-            //     lastArtistObserver.value.observe(el)
-            // }
-        }
+        () => foundArtists.value,
+        (newVal: Artist[]) => {
+            if (newVal.length) {
+                nextTick(() => {
+                    observeLastArtist()
+                })
+            }
+        },
     )
     
     return {
@@ -129,6 +147,5 @@ export function useSearch() {
         foundArtists,
         searchArtists,
         initSearch,
-        lastArtistRef
     }
 }
